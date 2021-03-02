@@ -1,31 +1,43 @@
 from django.http import HttpResponse
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET, require_POST
 
+
+@require_GET
 def simple_route(request):
-    if request.method in ['POST', 'PUT']:
-        return HttpResponse(status=405)
-    return HttpResponse("")
+    return HttpResponse()
 
-def slug_route(request, param):
-    return HttpResponse(param)
 
-def sum_route(request, s1, s2):
-    return HttpResponse(int(s1)+int(s2))
+def slug_route(request, slug):
+    return HttpResponse(slug)
 
-@require_http_methods(["GET"])
+
+def sum_route(request, a, b):
+    try:
+        a = int(a)
+        b = int(b)
+    except (ValueError, TypeError):
+        return HttpResponse(status=400)
+
+    return HttpResponse(a + b)
+
+
+@require_GET
 def sum_get_method(request):
-    s1 = request.GET.get('a')
-    s2 = request.GET.get('b')
     try:
-        return HttpResponse(int(s1)+int(s2))
-    except:
+        a = int(request.GET.get('a'))
+        b = int(request.GET.get('b'))
+    except (ValueError, TypeError):
         return HttpResponse(status=400)
 
-@require_http_methods(["POST"])
+    return HttpResponse(a + b)
+
+
+@require_POST
 def sum_post_method(request):
-    s1 = request.POST.get('a')
-    s2 = request.POST.get('b')
     try:
-        return HttpResponse(int(s1)+int(s2))
-    except:
+        a = int(request.POST.get('a'))
+        b = int(request.POST.get('b'))
+    except (ValueError, TypeError):
         return HttpResponse(status=400)
+
+    return HttpResponse(a + b)
