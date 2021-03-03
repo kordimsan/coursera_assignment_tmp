@@ -4,7 +4,16 @@ from django.shortcuts import render
 # Create your views here.
 
 def echo(request):
-    pass
+    statement = request.META.get('HTTP_X_PRINT_STATEMENT','empty')
+    cont = {}
+    if request.method == 'GET':
+        cont['params'] = [(k,v) for k,v in request.GET.items()]
+        cont['method'] = 'get'
+    if request.method == 'POST':
+        cont['params'] = [(k,v) for k,v in request.POST.items()]
+        cont['method'] = 'post'
+    cont['statement'] = statement
+    return render(request, 'echo.html', context=cont)
 
 
 def filters(request):
