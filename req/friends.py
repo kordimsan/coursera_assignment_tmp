@@ -1,9 +1,10 @@
+import os
 import requests
 from pprint import pprint
 from datetime import datetime
 from collections import Counter
 
-ACCESS_TOKEN = '422ac984422ac984422ac98463425c52f74422a422ac984221d1c223d90e46a32b2839a'
+ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 
 def calc_age(uid):
     url = f'https://api.vk.com/method/users.get?v=5.71&access_token={ACCESS_TOKEN}&user_ids={uid}'
